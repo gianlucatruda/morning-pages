@@ -1,26 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
-    const [note, setNote] = useState('');
+  const [note, setNote] = useState('');
 
-    // Function to calculate word count
-    const wordCount = note.trim().split(/\s+/).filter(Boolean).length;
+  useEffect(() => {
+    // Load the note and timestamp from localStorage when the component mounts
+    const savedNote = localStorage.getItem('userNote');
+    const savedTimestamp = localStorage.getItem('noteTimestamp');
 
-    return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-          <div className="w-3/4 md:w-3/4 lg:w-1/2">
-            <textarea
-                value={note}
-                onChange={e => setNote(e.target.value)}
-                placeholder="Write your note here..."
-                className="w-full h-72 p-5 text-lg border-none rounded-xl shadow-md focus:shadow-lg outline-none resize-none mb-2"
-            />
-            <div className="text-right text-sm text-gray-600">
-              {wordCount} {wordCount === 1 ? "word": "words"}
-            </div>
+    // If the note is older than 12 hours, clear it
+    const TWELVE_HOURS = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+    if (savedTimestamp && Date.now() - savedTimestamp > TWELVE_HOURS) {
+      localStorage.removeItem('userNote');
+      localStorage.removeItem('noteTimestamp');
+    } else if (savedNote) {
+      setNote(savedNote);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save the note to localStorage whenever it changes
+    localStorage.setItem('userNote', note);
+    localStorage.setItem('noteTimestamp', Date.now()); // also save the current timestamp
+  }, [note]);
+
+  const handleClearNote = () => {
+    setNote('');
+    localStorage.removeItem('userNote');
+    localStorage.removeItem('noteTimestamp');
+  };
+
+  const wordCount = note.trim().split(/\s+/).filter(Boolean).length;
+
+  return (
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="w-4/5 md:w-1/2 lg:w-1/3">
+        <textarea
+          value={note}
+          onChange={e => setNote(e.target.value)}
+          placeholder="Write your note here..."
+          className="w-full h-72 p-5 text-lg border-none rounded-xl shadow-md focus:shadow-lg outline-none resize-none mb-2"
+        />
+        <div className="flex justify-between items-center">
+          <div className="text-left text-sm text-gray-600">
+            {wordCount} {wordCount === 1 ? "word" : "words"}
           </div>
+          <button
+            onClick={handleClearNote}
+            className="px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+          >
+            Clear
+          </button>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default App;

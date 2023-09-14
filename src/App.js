@@ -34,12 +34,12 @@ function App() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="w-4/5 md:w-1/2 lg:w-1/3">
+      <div className="w-3/4 min-w-[300px] max-w-[900px]">
         <textarea
           value={note}
           onChange={e => setNote(e.target.value)}
-          placeholder="Write your note here..."
-          className="w-full h-72 p-5 text-lg border-none rounded-xl shadow-md focus:shadow-lg outline-none resize-none mb-2"
+          placeholder="Write here..."
+          className="w-full h-72 p-5 text-sm sm:text-lg border-none rounded-xl shadow-md focus:shadow-lg outline-none resize-none mb-2"
         />
         <div className="flex justify-between items-center">
           <div className="text-left text-sm text-gray-600">
@@ -51,6 +51,9 @@ function App() {
           >
             Clear
           </button>
+        </div>
+        <div className="py-4 items-center">
+        <p className="text-xs text-center text-gray-600">Autosaved offline on your computed. Clears automatically after 12 hours.</p>
         </div>
       </div>
     </div>

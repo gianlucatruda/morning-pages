@@ -53,7 +53,7 @@ function App() {
           </button>
         </div>
         <div className="py-4 items-center">
-        <p className="text-xs text-center text-gray-600">Autosaved offline on your computed. Clears automatically after 12 hours.</p>
+        <p className="text-xs text-center text-gray-600">Autosaved offline to your device. Cleared automatically after 12 hours.</p>
         </div>
       </div>
     </div>
